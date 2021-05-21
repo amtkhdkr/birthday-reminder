@@ -18,7 +18,7 @@ def all_users():
     """
     response_object = {'status': 'success', 'container_id': os.uname()[1],
                        'users': [user.to_json() for user in User.query.all()]}
-    return jsonify(response_object, indent=4)
+    return jsonify(response_object)
 
 
 @users_blueprint.route('/', methods=['GET'])
