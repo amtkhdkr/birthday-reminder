@@ -10,6 +10,7 @@ class BaseConfig:
     DEBUG = False
     TESTING = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    JSONIFY_PRETTYPRINT_REGULAR = True
 
 
 class DevelopmentConfig(BaseConfig):

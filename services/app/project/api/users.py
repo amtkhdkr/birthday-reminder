@@ -1,4 +1,3 @@
-import copy
 import datetime
 import os
 import re
@@ -19,7 +18,7 @@ def all_users():
     """
     response_object = {'status': 'success', 'container_id': os.uname()[1],
                        'users': [user.to_json() for user in User.query.all()]}
-    return jsonify(response_object)
+    return jsonify(response_object, indent=4)
 
 
 @users_blueprint.route('/', methods=['GET'])
@@ -42,7 +41,7 @@ def validate_birthday(birthday_str):
     except ValueError as ve:
         error_msg = f'Invalid birth date string {birthday_str}: {ve}'
     else:
-        in_the_past = birthday < datetime.date.today()
+        in_the_past = birthday <= datetime.date.today()
         if not in_the_past:
             error_msg = f'Birthday cannot be in the future: {birthday_str}\n'
         else:
@@ -72,15 +71,15 @@ def calculate_birthday(user):
     response_object = dict()
     today = datetime.date.today()
     this_years_birthday = datetime.date(today.year, user.birthday.month, user.birthday.day)
-    if this_years_birthday > today:
+    if this_years_birthday >= today:
         remaining = (this_years_birthday - today).days
     else:
         next_years_birthday = datetime.date(today.year + 1, user.birthday.month, user.birthday.day)
         remaining = (next_years_birthday - today).days
     if remaining == 0:
-        msg = f'Hello, {user.name}! Happy birthday!\n'
+        msg = f'Hello, {user.name}! Happy birthday!'
     else:
-        msg = f'Hello, {user.name}! Your birthday is in {remaining} days\n'
+        msg = f'Hello, {user.name}! Your birthday is in {remaining} days'
     response_object['message'] = msg
     return jsonify(response_object)
 
