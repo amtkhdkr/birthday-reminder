@@ -4,14 +4,34 @@ from flask import Flask
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-
 # instantiate the extensions
+from opencensus.ext.flask.flask_middleware import FlaskMiddleware
+from opencensus.ext.stackdriver.trace_exporter import StackdriverExporter
+from opencensus.trace.propagation import google_cloud_format
+from opencensus.trace.samplers import AlwaysOnSampler
+
 db = SQLAlchemy()
 migrate = Migrate()
+propagator = google_cloud_format.GoogleCloudFormatPropagator()
+
+
+def createMiddleWare(app, exporter):
+    """
+    Configure a flask middleware that listens for each request and applies automatic tracing.
+    This needs to be set up before the application starts.
+    :param app: WSGI application
+    :param exporter: Exporter instance object (StackdriverExporter)
+    :return:
+    """
+    middleware = FlaskMiddleware(
+        app,
+        exporter=exporter,
+        propagator=propagator,
+        sampler=AlwaysOnSampler())
+    return middleware
 
 
 def app_factory():
-
     # instantiate the app
     app = Flask(__name__)
 
@@ -35,4 +55,6 @@ def app_factory():
     def ctx():
         return {'app': app, 'db': db}
 
+    # Instrument Flask to do tracing automatically
+    createMiddleWare(app, StackdriverExporter())
     return app
