@@ -9,4 +9,4 @@ spec:
     service: postgres
   type: ClusterIP
   ports:
-    - port: 5432
+    - port: 8090
