@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    name: birthday-reminder
+  name: birthday-reminder
+spec:
+  progressDeadlineSeconds: 2147483647
+  replicas: 1
+  selector:
+    matchLabels:
+      app: birthday-reminder
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: birthday-reminder
+    spec:
+      containers:
+        - env:
+            - name: FLASK_ENV
+              value: development
+            - name: APP_SETTINGS
+              value: project.config.DevelopmentConfig
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: postgres-credentials
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: postgres-credentials
+          image: gcr.io/birthday-reminder-amt/birthday-reminder:1.0.0
+          imagePullPolicy: Always
+          name: birthday-reminder
+          resources: { }
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: { }
+      terminationGracePeriodSeconds: 30

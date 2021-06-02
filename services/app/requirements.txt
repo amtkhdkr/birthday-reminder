@@ -1,7 +1,15 @@
-Flask~=1.1.2
-Flask-Cors==3.0.10
-flask-migrate==2.7.0
-Flask-SQLAlchemy==2.5.1
-gunicorn==20.1.0
-psycopg2-binary==2.8.6
-PyYAML~=5.4.1
+google-cloud-monitoring==0.36.0
+google-cloud-trace==0.24.0
+opencensus==0.7.13
+# Don't upgrade to 2.0.0 yet until opencensus-ext-flask is okay with it
+Flask==1.1.4
+opencensus-ext-stackdriver==0.7.4
+opencensus-ext-flask==0.7.5 # requires flask!=1.1.3, <2.0.0 and >=0.12.3
+opencensus-context==0.1.2
+Flask-Cors
+flask-migrate
+Flask-SQLAlchemy
+gunicorn
+psycopg2-binary
+PyYAML
+requests

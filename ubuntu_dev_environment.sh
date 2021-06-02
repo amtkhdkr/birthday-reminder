@@ -25,3 +25,6 @@ sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 echo Install minikube
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
 sudo dpkg -i minikube_latest_amd64.deb
+
+echo Install kubectl
+gcloud components install kubectl

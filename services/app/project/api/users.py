@@ -97,6 +97,15 @@ def update_user(user, birthday_str):
 @users_blueprint.route('/hello/<username>', methods=['PUT', 'DELETE', 'GET'])
 def single_user(username):
     """
+    Traces the execution of API call as it goes and uploads its trace
+    :return: Success/Fail response as json
+    """
+    response = process_username(username)
+    return response
+
+
+def process_username(username):
+    """
     Performs edit, delete or get operations on a user
     :return: Success/Fail response as json
     """

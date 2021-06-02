@@ -1,0 +1,5 @@
+steps:
+  - name: 'docker'
+    args: [ 'build', '-t', 'gcr.io/birthday-reminder-amt/birthday-reminder-db:1.0.0', '.' ]
+images:
+  - 'gcr.io/birthday-reminder-amt/birthday-reminder-db:1.0.0'
