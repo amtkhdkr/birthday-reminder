@@ -62,3 +62,36 @@ When you want to shut down the application:
 The postgresql database image uses a very simple SQL database [create.sql](services/db/create.sql) which is needed to initialize the database with the
 proper table to contain the names and birthday dates schema.
 
+
+#### Deployment Requirements
+If you are using Cloud Shell, skip to the next section.
+
+1. Install gcloud <https://cloud.google.com/sdk/install>
+2. Install kubectl <https://kubernetes.io/docs/tasks/tools/install-kubectl/>
+3. Install docker <https://docs.docker.com/install/>
+
+#### Google Container Registry Image Setup
+You can use the provided cloud build files to build and push images of the App and Database for use in K8s.
+
+[cloudbuild.yaml](services/app/cloudbuild.yaml) for Flask App helps create image: gcr.io/birthday-reminder-amt/birthday-reminder:1.0.0
+
+[cloudbuild.yaml](services/db/cloudbuild.yaml) for Postgres DB helps create image: gcr.io/birthday-reminder-amt/birthday-reminder-db:1.0.0
+
+#### Create a GKE cluster
+- Enable Google Cloud and set up region and zone.
+    `gcloud init`
+- Enable the GKE API & billing:
+    `gcloud services enable container.googleapis.com`
+
+Send request to the service:
+
+```shell
+curl -w "\n" $(kubectl get svc birthday-reminder -ojsonpath='{.status.loadBalancer.ingress[0].ip}')
+```
+Visit [Trace List](https://console.cloud.google.com/traces/list) to check traces generated.
+    Click on any trace in the graph to see the Waterfall View.
+
+Clean up GKE cluster/pods/services
+```shell
+gcloud container clusters delete demo
+```
